@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>discuz</title>
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif|Raleway" rel="stylesheet">
+    <style>
+    #message-list {
+      list-style-type: none;
+    }
+    .message + .message {
+      margin-top: 20px;
+    }
+    .messageContent {
+      color: #333333;
+      font-family: 'Raleway', sans-serif;
+      font-size: 16px;
+    }
+    .messageContent::first-letter {
+      text-transform: uppercase;
+    }
+    .time {
+      color: #afafaf;
+      font-family: 'Noto Serif', serif;
+      font-size: 12px;
+    }
+    </style>
+  </head>
+  <body>
+    <form id="create-form">
+      <select id="update-mode">
+        <option value="" disabled selected>Update Mode</option>
+        <option value="polling">Polling</option>
+        <option value="longPolling">Long Polling</option>
+        <option value="websocket">Websocket</option>
+      </select>
+      <input type="text" id="message">
+      <input type="submit" value="Send">
+    </form>
+    <ul id="message-list">
+      <!--<li class="message">
+        <div class="messageContent"></div>
+        <div class="time"></div>
+      </li>-->
+    </ul>
+  </body>
+</html>
