@@ -1,3 +1,5 @@
+import { eventChannel } from 'redux-saga'
+
 export function postMessage (message) {
   return new Promise(function (resolve, reject) {
     const xhr = new XMLHttpRequest()
@@ -54,5 +56,20 @@ export function getMessagesWithTimeout (timeout) {
       reject(err)
     }
     xhr.send()
+  })
+}
+
+export function getMessagesFromWebsocket () {
+  return eventChannel(function (emitter) {
+    const ws = new WebSocket('ws://localhost:8081')
+    ws.addEventListener('message', onMessage)
+
+    function onMessage (e) {
+      emitter(JSON.parse(e.data))
+    }
+
+    return function () {
+      ws.removeEventListener('message', onMessage)
+    }
   })
 }

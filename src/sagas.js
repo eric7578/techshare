@@ -1,4 +1,4 @@
-import { takeLatest, call, put } from 'redux-saga/effects'
+import { take, takeLatest, call, put, cancelled } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import * as api from './api'
 
@@ -54,7 +54,19 @@ function* doLongPolling () {
 }
 
 function* doWebsocket () {
-  console.log('doWebsocket')
+  const wsChannel = yield call(api.getMessagesFromWebsocket)
+  try {
+    while (true) {
+      const messages = yield take(wsChannel)
+      yield call(onGetMessages, messages)
+    }
+  } catch (err) {
+    // ignore
+  } finally {
+    if (yield cancelled()) {
+      wsChannel.close()
+    }
+  }
 }
 
 function* onGetMessages (messages) {

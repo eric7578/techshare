@@ -29,4 +29,7 @@ router.get('/longpolling', function (req, res) {
   }, 500)
 })
 
-module.exports = router
+module.exports = {
+  router,
+  messages
+}

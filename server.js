@@ -11,8 +11,10 @@ const webpack = require('webpack')
 const bodyParser = require('body-parser')
 const proxyMiddleware = require('http-proxy-middleware')
 const webpackConfig = require('./build/webpack.dev.conf')
+const ws = require('ws')
 
 const port = process.env.PORT || config.dev.port
+const wsport = process.env.WSPORT || config.dev.wsport
 const autoOpenBrowser = !!config.dev.autoOpenBrowser
 const proxyTable = config.dev.proxyTable
 
@@ -64,6 +66,22 @@ devMiddleware.waitUntilValid(() => {
   console.log('> Listening at ' + port + '\n')
 })
 
-app.use('/post', require('./routes/post'))
+const { router, messages } = require('./routes/post')
+app.use('/post', router)
 
 const server = app.listen(port)
+
+const wss = new ws.Server({
+  perMessageDeflate: false,
+  port: wsport
+})
+
+wss.on('connection', function (ws) {
+  const intervalId = setInterval(function () {
+    ws.send(JSON.stringify(messages))
+  }, 1000)
+
+  ws.on('close', function () {
+    clearInterval(intervalId)
+  })
+})
