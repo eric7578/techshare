@@ -14,11 +14,12 @@ const wss = new ws.Server({
 
 // get message with websocket
 wss.on('connection', function (ws) {
-  const initMessagesLength = messages.get().length
+  let initMessagesLength = messages.get().length
 
   const intervalId = setInterval(function () {
     const latestMessages = messages.get()
     if (initMessagesLength !== latestMessages.length) {
+      initMessagesLength = latestMessages.length
       ws.send(JSON.stringify(latestMessages))
     }
   }, 500)
