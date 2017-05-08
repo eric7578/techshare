@@ -3,7 +3,7 @@ import { eventChannel } from 'redux-saga'
 export function postMessage (message) {
   return new Promise(function (resolve, reject) {
     const xhr = new XMLHttpRequest()
-    xhr.open('POST', '/post')
+    xhr.open('POST', 'http://localhost:8081/post')
     xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8')
     xhr.onload = function (e) {
       if (e.target.status === 200) {
@@ -22,7 +22,7 @@ export function postMessage (message) {
 export function getMessages (timout) {
   return new Promise(function (resolve, reject) {
     const xhr = new XMLHttpRequest()
-    xhr.open('GET', '/post')
+    xhr.open('GET', 'http://localhost:8081/post')
     xhr.onload = function (e) {
       if (e.target.status === 200) {
         resolve(JSON.parse(xhr.response))
@@ -41,7 +41,7 @@ export function getMessagesWithTimeout (timeout) {
   return new Promise(function (resolve, reject) {
     const xhr = new XMLHttpRequest()
     xhr.timeout = timeout
-    xhr.open('GET', '/post/longpolling')
+    xhr.open('GET', 'http://localhost:8081/post/longpolling')
     xhr.onload = function (e) {
       if (e.target.status === 200) {
         resolve(JSON.parse(xhr.response))
@@ -61,7 +61,7 @@ export function getMessagesWithTimeout (timeout) {
 
 export function getMessagesFromWebsocket () {
   return eventChannel(function (emitter) {
-    const ws = new WebSocket('ws://localhost:8081')
+    const ws = new WebSocket('ws://localhost:8082')
     ws.addEventListener('message', onMessage)
 
     function onMessage (e) {

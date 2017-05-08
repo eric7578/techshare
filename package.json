@@ -5,14 +5,12 @@
   "author": "ericyan <eric7578@gmail.com>",
   "private": true,
   "scripts": {
-    "dev": "node server.js",
-    "start": "node build/dev-server.js",
-    "build": "node build/build.js",
-    "lint": "eslint --ext .js,.vue src"
+    "start": "node servers"
   },
   "dependencies": {
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
+    "cors": "^2.8.3",
     "express-session": "^1.15.2",
     "jquery": "^3.2.1",
     "moment": "^2.18.1",
