@@ -66,20 +66,49 @@ devMiddleware.waitUntilValid(() => {
   console.log('> Listening at ' + port + '\n')
 })
 
-const { router, messages } = require('./routes/post')
-app.use('/post', router)
+const messages = require('./messags')
+
+// add a new message
+app.post('/post', function (req, res) {
+  messages.add(req.body.message)
+  res.status(200).end()
+})
+
+// get messages with ajax
+app.get('/post', function (req, res) {
+  res.status(200).json(messages.get())
+})
+
+// get message with login polling
+app.get('/post/longpolling', function (req, res) {
+  const initMessagesLength = messages.get().length
+
+  const intervalId = setInterval(function () {
+    const latestMessages = messages.get()
+    if (initMessagesLength !== latestMessages.length) {
+      clearInterval(intervalId)
+      res.status(200).json(latestMessages)
+    }
+  }, 500)
+})
 
 const server = app.listen(port)
 
+// get message with websocket
 const wss = new ws.Server({
   perMessageDeflate: false,
   port: wsport
 })
 
 wss.on('connection', function (ws) {
+  const initMessagesLength = messages.get().length
+
   const intervalId = setInterval(function () {
-    ws.send(JSON.stringify(messages))
-  }, 1000)
+    const latestMessages = messages.get()
+    if (initMessagesLength !== latestMessages.length) {
+      ws.send(JSON.stringify(latestMessages))
+    }
+  }, 500)
 
   ws.on('close', function () {
     clearInterval(intervalId)
