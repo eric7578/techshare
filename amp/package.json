@@ -1,0 +1,16 @@
+{
+  "name": "techshare_amp",
+  "version": "1.0.0",
+  "description": "* AMP就是 `7項規範` + `AMP化組件` = `AMP-ify` App * https://www.youtube.com/watch?v=9Cfxm7cikMY * https://www.html5rocks.com/en/tutorials/internals/howbrowserswork/",
+  "main": "index.js",
+  "dependencies": {
+    "http-server": "^0.11.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "http-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

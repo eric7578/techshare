@@ -1,0 +1,129 @@
+<!doctype html>
+<!-- 宣告AMP頁面 -->
+<html amp lang="en">
+  <head>
+    <meta charset="utf-8">
+    <!-- 越早加載AMP JS越好 -->
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+
+    <!-- 擴充其他AMP組件 -->
+    <script async custom-element="amp-list" src="https://cdn.ampproject.org/v0/amp-list-0.1.js"></script>
+    <script async custom-template="amp-mustache" src="https://cdn.ampproject.org/v0/amp-mustache-0.2.js"></script>
+    <script async custom-element="amp-bind" src="https://cdn.ampproject.org/v0/amp-bind-0.1.js"></script>
+
+    <title>Hello, AMPs</title>
+    <!-- AMP頁面的計算權重回饋到OOO頁面中 -->
+    <link rel="canonical" href="http://example.ampproject.org/article-metadata.html">
+    <!-- RWD -->
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+
+    <!-- 外面的CSS在AMP規範下不許用 -->
+    <!-- <link rel="stylesheet" href="https://beagiver.com/css/slick-theme.css"> -->
+
+    <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+
+    <!-- 自己定義的css 必須要 inline -->
+    <style amp-custom>
+      .activity {
+        margin-bottom: 40px;
+      }
+
+      .activity-collapsed .content {
+        display: none;
+      }
+
+      h2 {
+        color: #333;
+        font-size: 18px;
+      }
+
+      h2 a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .metaDescription {
+        color: #666;
+        font-size: 14px;
+      }
+
+      amp-list.activities {
+        width: 500px;
+        margin: auto;
+      }
+
+      .imageWrapper {
+        position: relative;
+        width: 100%;
+        height: 250px;
+      }
+
+      amp-img.contain img {
+        object-fit: contain;
+      }
+
+      address {
+        color: #000;
+        font-size: 12px;
+        text-decoration: none;
+        font-style: normal;
+        line-height: 25px;
+      }
+
+      .organizer, .contacts {
+        color: #000;
+        font-size: 12px;
+        line-height: 25px;
+      }
+
+      .contacts span {
+        display: block;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <amp-state id="uiState">
+      <script type="application/json">
+        {
+          "showDetails": true
+        }
+      </script>
+    </amp-state>
+
+    <button on="tap:AMP.setState({uiState: {showDetails: uiState.showDetails ? null : true}})">Toggle...</button>
+
+    <amp-list
+      class="activities"
+      width="auto"
+      height="100"
+      layout="fixed-height"
+      src="https://beagiver.com/api/v2/activity?offset=0&limit=10"
+      items="."
+    >
+      <template type="amp-mustache">
+        <div [class]="uiState.showDetails ? 'activity' : 'activity-collapsed'">
+          <h2>
+            <a href="https://beagiver.com/event?pkey={{activityId}}" target="_blank">{{activityTitle}}</a>
+          </h2>
+          <div class="content">
+            <div class="imageWrapper">
+                <amp-img class="contain" layout="fill" src="{{fileUrl}}"></amp-img>
+              </div>
+              <p class="metaDescription">{{metaDescription}}</p>
+              <address>
+                {{activityLocation}}
+              </address>
+              {{#organizer}}<div class="organizer">{{organizer}}</div>{{/organizer}}
+              <div class="contacts">
+                {{#contact1}}<span>聯絡方式: {{contact1}}</span>{{/contact1}}
+                {{#contact2}}<span>聯絡方式2: {{contact2}}</span>{{/contact2}}
+              </div>
+          </div>
+        </div>
+      </template>
+    </amp-list>
+  </body>
+
+</html>
