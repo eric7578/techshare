@@ -1,0 +1,41 @@
+<template id="cashDisplay">
+  <style>
+    .amount {
+      display: block;
+    }
+  </style>
+  <span class="amount"></span>
+</template>
+
+<script>
+  class CashDisplay extends HTMLElement {
+    static get observedAttributes () {
+      return ['amount']
+    }
+
+    constructor () {
+      super()
+
+      // clone template
+      const template = document.currentScript.ownerDocument.querySelector('#cashDisplay')
+      this.$shadow = this.attachShadow({ mode: 'open' })
+      this.$shadow.appendChild(template.content.cloneNode(true))
+    }
+
+    attributeChangedCallback (name, oldValue, newValue) {
+      if (newValue) {
+        this.updateAmount(newValue)
+      }
+    }
+
+    updateAmount (val) {
+      // FROM https://stackoverflow.com/questions/149055/how-can-i-format-numbers-as-dollars-currency-string-in-javascript
+      const formated = val.split('')
+        .reverse()
+        .reduce((acc, num, i, orig) => num === "-" ? acc : num + (i && !(i % 3) ? "," : "") + acc, "")
+      this.$shadow.querySelector('.amount').textContent = formated
+    }
+  }
+
+  customElements.define('cash-display', CashDisplay)
+</script>
